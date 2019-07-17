@@ -1,0 +1,46 @@
+﻿@model WebApplication2.Models.i.IndexModel
+@{
+    ViewBag.Title = "Index";
+    List<WebApplication2.DB.Categories> categories = new List<WebApplication2.DB.Categories>();
+    if (Model.Category!=null)
+    {
+        categories.Add(Model.Category);
+        var parentcat = Model.Category.Categories2;
+        while (parentcat!=null)
+        {
+        categories.Add(parentcat);
+        parentcat = parentcat.Categories2;
+        }
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="@Url.Action("index","i",new {id=(int?)null})">Ana Sayfa</a></li>
+            @for (int i = categories.Count - 1; i >= 0; i--)
+            {
+                if (i==0)
+                {
+                    <li class="active">@categories[i].Name</li>
+                }
+                else
+                {
+                    <li><a href="@Url.Action("index","i",new {id= categories[i].Id})">@categories[i].Name</a></li>
+                }
+                
+            }
+
+            @*<li class="active">Bilgisayar</li>*@
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model.Products)
+    {
+        @Html.Partial("ProductItem", item);
+
+
+    }
+
+</div>
